@@ -27,6 +27,7 @@ class Server {
 				const server = express();
 	
 				server.use(cors());
+				//TODO: in production build make the server.use(helmet()) independant of if block.
 				if(!dev) {
 					server.use(helmet());
 				}
