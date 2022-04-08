@@ -6,14 +6,48 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import path from 'path';
+import { IApiFactory } from "./factories/apiFactories";
 
 
-class Server {
+export default class Server {
 
-	constructor() {
+	public server: express.Application;
+	private dev : boolean;
+
+	constructor(private apiFactory: IApiFactory) {
 		config();
+		this.server = express();
+		this.dev = process.env.NODE_ENV !== "production";
+		this.configure();
 	}
 	
+	private configure = () => {
+		this.server.use(cors());
+		//TODO: in production build make the server.use(helmet()) independant of if block.
+		if(!this.dev) {
+			this.server.use(helmet());
+		}
+		this.server.use(cookieParser(process.env.COOKIE_SECRET));
+		this.server.use(bodyParser.json({ limit: '25mb' }));
+		this.server.use(express.static(path.join(__dirname, './../src/public/')));
+	}
+
+	private addRoutes(): void {
+        const router = express.Router();
+        // router.get('/', this.indexHandler);
+        const endPoints = this.apiFactory.getEndPoints();
+        endPoints.forEach(endPoint => {
+            router[endPoint.httpVerb](endPoint.pathString, endPoint.handlers);            
+        });
+        // this.server.use(this.authenticator);
+        this.server.use(router);
+        //catch 404
+        // this.server.use(this.notFoundHandler);
+        //error handler
+        // this.server.use(this.errorHandler);
+    }
+
+
 	public init = () => {
 
 		const dev = process.env.NODE_ENV !== "production";
@@ -84,5 +118,5 @@ class Server {
 
 }
 
-const ssr = new Server();
-ssr.init();
+// const ssr = new Server();
+// ssr.init();
