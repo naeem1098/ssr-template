@@ -15,6 +15,7 @@ const Home: NextPage = () => {
 
             <main className={styles.main}>
                 <h1>Server Side rendering template in Nextjs, Express, Mysql, Jest for testing</h1>
+                <p>Hello from new server</p>
             </main>
 
             <footer className={styles.footer}>

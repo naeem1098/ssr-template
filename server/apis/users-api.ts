@@ -8,7 +8,6 @@ import { emailValidator, passwordValidator, userIdValidator } from '../modules/u
 import { IUserService } from "../modules/users/user-service";
 import { ApiRoute, EndPoint, HttpVerbs } from "./../utils/api-routes";
 import { User } from '../modules/users/user-model';
-import { development } from '../core/config';
 
 declare global {
     namespace Express {
@@ -499,7 +498,7 @@ export class UsersApi extends ApiRoute{
                 if (!bcrypt.compareSync(password.toString(), user.password_hash)) {
                     resp.status(403).json({message: "wrong password!"})
                 } else {
-                    let token = jwt.sign(user, development.JWT_DEVELOPMENT_SECRATE, {expiresIn: Date.now() + (1000*60*60*8), subject: user.user_id});
+                    let token = jwt.sign(user, process.env.JWT_SECRATE, {expiresIn: Date.now() + (1000*60*60*8), subject: user.user_id});
                     token = "JWT " + token;
                     user = new User(user);
                     user.password = undefined;
