@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { render } from "@testing-library/react";
+import path from 'path';
 
 
 class Server {
@@ -33,6 +33,7 @@ class Server {
 				}
 				server.use(cookieParser(process.env.COOKIE_SECRET));
 				server.use(bodyParser.json({ limit: '25mb' }));
+				server.use(express.static(path.join(__dirname, './../src/public/')));
 	
 				server.get("/", (req: Request, res: Response) => {
 					return app.render(req, res, "/");
