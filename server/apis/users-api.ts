@@ -20,7 +20,7 @@ declare global {
 export class UsersApi extends ApiRoute{
     
     constructor(private userService: IUserService /* other dependencies go here...*/){
-        super('/api/user')
+        super('/user')
     }
 
     getEndPoints(): EndPoint[] {

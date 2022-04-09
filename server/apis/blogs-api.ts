@@ -6,7 +6,7 @@ import { IBlog } from '../modules/blogs/blog-model';
 export class BlogsApi extends ApiRoute{
     
     constructor(private userService: IBlogService /* other dependencies go here...*/){
-        super('/api/blog')
+        super('/blog')
     }
 
     getEndPoints(): EndPoint[] {
